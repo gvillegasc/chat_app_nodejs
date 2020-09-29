@@ -7,21 +7,26 @@ const {
 
 // Mensajes de Sockets
 io.on('connection', (client) => {
-	console.log('Cliente conectado');
 	const [valid, uid] = checkJWT(client.handshake.headers['x-token']);
 
 	// Validate authentication
 	if (!valid) {
-		console.log('Cliente invalido');
-
 		return client.disconnect();
 	}
 
-	console.log('Cliente validado');
-
 	// Change authentication state
 	userConnected(uid);
-	console.log('Cliente actualizado');
+
+	// Access in global room
+	client.join(uid);
+
+	// Listening
+	client.on('personal-message', (payload) => {
+		console.log(payload);
+
+		io.to(payload.from).emit('personal-message', payload);
+	});
+	// client.to(uid).emit('');
 
 	client.on('disconnect', () => {
 		userDiconnected(uid);
