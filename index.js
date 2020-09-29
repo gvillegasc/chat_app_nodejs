@@ -24,10 +24,12 @@ app.use(express.static(publicPath));
 // ROUTES IMPORT
 const authRoute = require('./routes/auth.route');
 const userRoute = require('./routes/user.route');
+const messageRoute = require('./routes/message.route');
 
 // USING ROUTES
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
+app.use('/api/message', messageRoute);
 
 server.listen(process.env.PORT, (err) => {
 	if (err) throw new Error(err);
